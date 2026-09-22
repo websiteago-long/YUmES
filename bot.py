@@ -1,13 +1,14 @@
+import os
 import asyncio
 import logging
 from aiogram import Bot, Dispatcher, F
 from aiogram.filters import CommandStart
 from aiogram.types import Message, ReplyKeyboardMarkup, KeyboardButton
 
-# Bot Token របស់អ្នក
-TOKEN = "8895552286:AAH0Msc0U6AmDiYi--CAAMOz825qFJuGKTg"
+# ទាញយក Token ដោយសុវត្ថិភាពពី Render Environment Variables
+TOKEN = os.getenv("TOKEN")
 
-# បង្កើតប៊ូតុងម៉ឺនុយខាងក្រោម
+# បង្កើតប៊ូតុងម៉ឺនុយខាងក្រោម (Reply Keyboard)
 main_menu_keyboard = ReplyKeyboardMarkup(
     keyboard=[
         [
@@ -26,7 +27,7 @@ main_menu_keyboard = ReplyKeyboardMarkup(
     input_field_placeholder="សូមជ្រើសរើសម៉ឺនុយខាងក្រោម..."
 )
 
-# ពេលវាយពាក្យ /start
+# ពេលអ្នកប្រើប្រាស់ផ្ញើ /start
 async def cmd_start(message: Message):
     await message.answer(
         "🔥 សូមស្វាគមន៍មកកាន់ Cisy Shop Bot!",
@@ -50,6 +51,10 @@ async def handle_redeem(message: Message):
     await message.answer("វិធីសាស្ត្រក្នុងការប្រើប្រាស់ Redeem Code៖ ...")
 
 async def main():
+    if not TOKEN:
+        print("Error: TOKEN environment variable not found!")
+        return
+        
     logging.basicConfig(level=logging.INFO)
     bot = Bot(token=TOKEN)
     dp = Dispatcher()
